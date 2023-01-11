@@ -12,7 +12,8 @@ body{
 	background-color: #747474;
 	overflow-x: hidden;
 }
-.error-msg{
+span.error-msg{
+	text-align: center;
     display: block;
     color: rgb(255, 254, 254);
     font-size: 20px;
@@ -20,7 +21,18 @@ body{
     background: rgb(110, 0, 21);
     border-radius: 50px;
     padding: 10px;
- }
+    animation: fadeOut 3.2s ease-in-out;
+}
+
+@keyframes fadeOut{
+	from{
+		opacity: 1;
+	}
+	to{
+		opacity: 0;
+	}
+}
+
  
 a {
 	cursor: pointer;
@@ -282,9 +294,6 @@ h6 span{
   color: #ffeba7;
   box-shadow: 0 8px 24px 0 rgba(16,39,112,.2);
 }
-
-
-
 
 .logo {
 	position: absolute;

@@ -45,21 +45,6 @@ if(isset($_POST['submit'])){
 <!-- End Nav
 ================================================== -->
 
-<!-- Begin Site Title
-================================================== -->
-
-<!-- End Site Title
-================================================== -->
-
-	<!-- Begin Featured
-	================================================== -->
-	
-<!-- LIMIT 10 -->
-
-
-
-
-
 <div class="container">
 <section class="featured-posts">
 	<div class="section-title">
@@ -69,38 +54,10 @@ if(isset($_POST['submit'])){
                                         <div class="input-group mb-3" >
 										<textarea name="bio" aria-label="Recipient's username" aria-describedby="basic-addon2" placeholder="Add a bio" class="form-control" id="textAreaExample" rows="3" 
 										style="width:401px;"></textarea>
-                                            <!-- <input
-                                                type="message"
-                                                class="form-control"
-                                                placeholder="Add a bio"
-                                                aria-label="Recipient's username"
-                                                aria-describedby="basic-addon2"> -->
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary" 
 												name="submit" value="submit"type="submit">Submit</button>
 </form>
-	
-	<!-- End Featured
-	================================================== -->
-
-	<!-- Begin List Posts
-	================================================== -->
-	
-	<!-- End List Posts
-	================================================== -->
-
-	<!-- Begin Footer
-	================================================== -->
-	<!-- <div class="footer">
-		<p style="text-align:center;">
-			 Copyright &copy; 2022 Nikesh Uprety
-		</p>
-		<div class="clearfix">
-		</div>
-	</div> -->
-	<!-- End Footer
-	================================================== -->
-
 </div>
 
 <!-- /.container -->

@@ -12,6 +12,7 @@ if(isset($_POST['login'])){
 
      $row = mysqli_fetch_array($result);
 
+
      if($row['user_type'] == 'admin'){
 
         $_SESSION['admin_name'] = $row['name'];
@@ -34,32 +35,34 @@ if(isset($_POST['register'])){
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     if (strlen($_POST["password"]) < 6) {
 
-        $error[] ="Password is <= 6 char";
+        $error[] ="Password is < 6 char";
     }
     else{
 
-        $pass = ($_POST['password']);
-    }
-    $cpass = ($_POST['cpassword']);
-    $select = " SELECT * FROM user_form WHERE email = '$email' && password = '$pass' ";
- 
-    $result = mysqli_query($conn, $select);
- 
-    if(mysqli_num_rows($result) > 0){
- 
-       $error[] = 'user already exist!';
- 
-    }else{
- 
-       if($pass != $cpass){
-          $error[] = 'password not matched!';   }
-    else{
-          $insert = "INSERT INTO user_form(name, email, password) VALUES('$name','$email','$pass')";
-          mysqli_query($conn, $insert);
-          header('location:signup_login.php');
-       
-    }
-}
+        $pass = md5($_POST['password']);
+        $cpass = md5($_POST['cpassword']);
+        $select = " SELECT * FROM user_form WHERE email = '$email' && password = '$pass' ";
+        
+        $result = mysqli_query($conn, $select);
+        
+        if(mysqli_num_rows($result) > 0){
+           
+           $error[] = 'user already exist!';
+           
+         }else{
+            
+            if($pass != $cpass){
+               $error[] = 'password not matched!';   }
+               else{
+                  $insert = "INSERT INTO user_form(name, email, password) VALUES('$name','$email','$pass')";
+                  mysqli_query($conn, $insert);
+                  // header('location:signup_login.php');
+                  $error[] = 'You have Registered successfully';
+
+                  
+               }
+            }
+         }
  };
 ?>
 
@@ -69,7 +72,9 @@ if(isset($_POST['register'])){
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>login form</title>
+   <title>BlogsNepal Login</title>
+<link rel="shortcut icon" href="assets/css/bootstrap.min.css">
+
 
    <!-- custom css file link  -->
    <link rel="stylesheet" href="assets/css/signup_login.css">
@@ -78,23 +83,7 @@ if(isset($_POST['register'])){
    <link rel='stylesheet' href='https://unicons.iconscout.com/release/v2.1.9/css/unicons.css'><link rel="stylesheet" href="assets/css/signup_login.css">
 </head>
 <body>
-   
-<!-- <div class="form-container">
-
-   <form action="" method="post">
-      <h3>login now</h3>
-      <?php
-    //   if(isset($error)){
-    //      foreach($error as $error){
-    //         echo '<span class="error-msg">'.$error.'</span>';
-    //      };
-    //   };
-    //  ?>
-     <a href="https://front.codes/" class="logo" target="_blank">
-		<img src="https://assets.codepen.io/1462889/fcy.png" alt="">
-	</a> -->
-
-	<div class="section">
+   <div class="section">
 		<div class="container">
 			<div class="row full-height justify-content-center">
 				<div class="col-12 text-center align-self-center py-5">
@@ -169,6 +158,7 @@ if(isset($_POST['register'])){
    </form>
 
 </div>
+<script src="assets/js/elements.js"></script>
 </body>
 </html>
 

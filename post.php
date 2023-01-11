@@ -18,18 +18,19 @@ if(isset($_FILES['image'])){
 		// echo "Successfull.";
 
 	}else{
-		echo"Could not be uploaded.";
+		// echo"Could not be uploaded.";
 	}
 
 }
 
 if(isset($_POST['submit'])){
 	$title =($_POST['title']);
-	$cont = ($_POST['content']);
+	$cont = ($_POST["content"]);
 	// $image = ($_POST[$file_name]);
 	// Attempt insert query execution
-	$sql = "INSERT INTO user_blogs(name, title, content, images) VALUES ('$user_name','$title', '$cont' ,'$file_name')";
+	$sql = "INSERT INTO user_blogs(name, title, `content`, images) VALUES ('$user_name','$title', '$cont' ,'$file_name')";
 	if(mysqli_query($conn, $sql)){
+		header('location:home.php');
 		// echo "Records added successfully.";
 	} else{
 		echo "ERROR: Could not able to execute $sql. " . mysqli_error($conn);
@@ -48,7 +49,8 @@ if(isset($_POST['submit'])){
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="icon" href="assets/img/favicon.ico">
 <title>blogsnepal</title>
-<link rel="shortcut icon" href="assets/css/bootstrap.min.css">
+<link rel="shortcut icon" href="assets/img/logo.png">
+
 <!-- Bootstrap core CSS -->
 <link href="assets/css/bootstrap.min.css" rel="stylesheet">
 <!-- Fonts -->
@@ -56,6 +58,48 @@ if(isset($_POST['submit'])){
 <link href="https://fonts.googleapis.com/css?family=Righteous%7CMerriweather:300,300i,400,400i,700,700i" rel="stylesheet">
 <!-- Custom styles for this template -->
 <link href="assets/css/mediumish.css" rel="stylesheet">
+<style>
+
+@media (max-width: 600px) {
+  .form-outline {
+	margin-top:40px;
+    width: 100%;
+  }
+  .form-label {
+	font-weight: bold;
+
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  .form-control {
+    width: 100%;
+  }
+}
+@media (min-width: 601px) {
+	.center button {
+    margin-top: 31px;
+    margin-right: 140px;
+}
+	input#typeText {
+    margin-bottom: 13px;
+}
+  .form-outline {
+    max-width: 600px;
+	margin-top:40px;
+  }
+  .form-label {
+	font-weight: bold;
+    display: inline-block;
+    width: 22%;
+    margin-right: 1%;
+  }
+  .form-control {
+    display: inline-block;
+    width: 78%;
+  }
+}
+
+</style>
 </head>
 <body>
 
@@ -103,12 +147,14 @@ if(isset($_POST['submit'])){
 </div>
 </nav>
 <div class="center">
+	<form action="" method="post" id="customForm" enctype="multipart/form-data">
 	<div class="form-outline">
-<form action="" method="post" id="customForm" enctype="multipart/form-data">
+	
 		<label  class="form-label" for="typeText">Title</label>
 	<input name="title" type="text" id="typeText" class="form-control" />
-	</div>
-	<div class="form-outline">
+	<!-- </div>
+		<div class="form-outline"> -->
+
 		<label class="form-label" for="textAreaExample">Content</label>
 	<textarea name="content" class="form-control" id="textAreaExample" rows="10"></textarea>
 	<label class="form-label" for="customFile">Input Image</label>
@@ -119,19 +165,6 @@ if(isset($_POST['submit'])){
 </div>
 
 <!-- End Nav
-================================================== -->
-
-<!-- End Related Posts
-================================================== -->
-
-<!-- Begin AlertBar
-================================================== -->
-<!-- <div class="alertbar">
-	<div class="container text-center">
-		<img src="assets/img/logo.png" alt=""> &nbsp; Never miss a <b>story</b> from us, get weekly updates in your inbox. <a href="#" class="btn subscribe">Get Updates</a>
-	</div>
-</div> -->
-<!-- End AlertBar
 ================================================== -->
 
 <!-- Begin Footer

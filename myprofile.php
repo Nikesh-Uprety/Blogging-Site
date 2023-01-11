@@ -4,12 +4,29 @@
 session_start(); {
 // Select the image from the database
 $user_name = $_SESSION['user_name'];
-
 $imagee="SELECT image_name from profile_image WHERE name='$user_name' ORDER BY created_at DESC";
 $imagequery=mysqli_query($conn, $imagee);
 $rowimage=mysqli_fetch_assoc($imagequery);
-// $image = $imagequery->fetch_assoc();
-// $sqll = "SELECT user_form.name, image.image_name FROM user_form INNER JOIN image ON user_form.Id = image.u_id WHERE user_form.name='$user_name';";
+
+// TO delete the blog card by passing the id
+
+if (isset($_GET['id'])){
+    // Sanitize the provided item id to prevent SQL injection attacks
+    $id = mysqli_real_escape_string($conn, $_GET['id']);
+$sql = "DELETE FROM user_blogs WHERE id= $id";
+
+if (mysqli_query($conn, $sql)) {
+     $error[] = 'Record deleted successfully';
+} else {
+    $error[] = 'There was a problem deleting the record';
+}
+}
+// Adding alert with custome css, by error-msg class
+if(isset($error)){
+    foreach($error as $error){
+       echo '<span class="error-msg">'.$error.'</span>';
+    };
+ };
 if(isset($_FILES['imagee'])){
 	echo "<pre>";
 	print_r($_FILES);
@@ -36,8 +53,7 @@ if(isset($_POST['submit'])){
         // the input field is empty
         echo "Please enter a value in the input field.";
     }
-	// $image = ($_POST[$file_name]);
-	// Attempt insert query execution
+
 	$sqlii = "INSERT INTO profile_image(name, image_name) VALUES ('$user_name','$file_name')";
 
 	if(mysqli_query($conn, $sqlii)){
@@ -47,24 +63,10 @@ if(isset($_POST['submit'])){
 		echo "ERROR: Could not able to execute $sql. " . mysqli_error($conn);
 	}
 }
-// $result = $conn->query($sqll);
-// $uimage="SELECT image_name from image WHERE u_id=user_form.Id ORDER BY created_at DESC";
-
-	// Query the database to retrieve the text value
 
 	$Bio = "SELECT bio FROM user_bio WHERE name = '$user_name' ORDER BY created_at DESC ";
 	$bio_result = mysqli_query($conn, $Bio);
 	$bio_row = mysqli_fetch_assoc($bio_result);
-	// $bio_text= $bio_row['bio']
-// Array ( [name] => Nikesh Uprety [image_name] => /assets/img/smallphoto.jpg )
-// Fetch and display the titles
-// $query = "SELECT * FROM user_blogs WHERE name = '$user_name' ORDER BY created_at DESC";
-// Check for errors
-// if(!$result){
-//     die('Error retrieving image from database [' . $conn->error . ']');
-// }
-// Get the image data as an associative array
-// echo($image['image_name']);
 };
 ?>
 
@@ -80,6 +82,8 @@ if(isset($_POST['submit'])){
         <meta name="author" content="">
         <link rel="icon" href="assets/img/favicon.ico">
         <title>BlogsNepal</title>
+<link rel="shortcut icon" href="assets/img/logo.png">
+
         <!-- Bootstrap core CSS -->
         <link href="assets/css/bootstrap.min.css" rel="stylesheet">
         <!-- Fonts -->
@@ -88,7 +92,18 @@ if(isset($_POST['submit'])){
             rel="stylesheet">
         <!-- Custom styles for this template -->
         <link href="assets/css/mediumish.css" rel="stylesheet">
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Khula:wght@600&display=swap');
+        </style>
     </head>
+    <style>
+        @media (max-width: 600px) {
+            div#rect {
+    margin-top: 196px;
+}
+  }
+
+    </style>
 
     <body>
 
@@ -137,15 +152,6 @@ if(isset($_POST['submit'])){
 												?>
                                     </div>
                                 </span>
-                                <div class="sociallinks">
-                                    <a target="_blank" href="#">
-                                        <i class="fa fa-facebook"></i>
-                                    </a>
-
-                                    <a target="_blank" href="#">
-                                        <i class="fa fa-google-plus"></i>
-                                    </a>
-                                </div>
                             </div>
                             <?php
 if ($imagequery->num_rows !== 0) {
@@ -164,27 +170,25 @@ if ($imagequery->num_rows !== 0) {
   else {
     // If the text value does not exist, display the form field
       ?>
-                            <div class="input-group-append">
                                 <form action="" method="post" enctype="multipart/form-data">
                                     <label>
                                         <img 
-                                            class="img-size immg"
+                                            class="img-size"
                                             src="assets/img/ilogo.png"
-                                            style="position:fixed;cursor:pointer;">
+                                            style="cursor:pointer;">
                                         <input required type="file" name="imagee" style="display:none">
+                                        <button
+                                            type="submit"
+                                            name="submit"
+                                            value="submit"
+                                            class="btn btn-success immg"
+                                            style="box-sizing: border-box;margin-top: 149px;position: absolute;margin-left: -123px;">Upload Picture</button>
                                     </label>
-                                    <button
-                                        type="submit"
-                                        name="submit"
-                                        value="submit"
-                                        class="btn btn-success immg"
-                                        style="box-sizing: border-box;margin-top: 149px;position: absolute;margin-left: 60px;">Submit</button>
                                 </form>
-                            </div>
+                            
                             <?php
   }
   ?>
-                        </div>
                         <?php
 ?>
 
@@ -223,8 +227,7 @@ while ($row = mysqli_fetch_array($rest)) {
                                     <?php echo $row['title']; ?>
                                 </a>
                             </h2>
-                            <h4 class="card-text">This is a longer card with supporting text below as a
-                                natural lead-in to additional content. This content is a little bit longer.</h4>
+                            <h4 class="card-text" ><?php echo $row['content']; ?></h4>
                             <div class="metafooter">
                                 <div class="wrapfooter">
                                     <span class="meta-footer-thumb">
@@ -242,13 +245,16 @@ while ($row = mysqli_fetch_array($rest)) {
                                         <span class="dot"></span><span class="post-read">6 min read</span>
                                     </span>
                                     <span class="post-read-more">
-                                        <a href="post.html" title="Read Story">
-                                            <svg class="svgIcon-use" width="25" height="25" viewbox="0 0 25 25">
-                                                <path
-                                                    d="M19 6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14.66h.012c.01.103.045.204.12.285a.5.5 0 0 0 .706.03L12.5 16.85l5.662 4.126a.508.508 0 0 0 .708-.03.5.5 0 0 0 .118-.285H19V6zm-6.838 9.97L7 19.636V6c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v13.637l-5.162-3.668a.49.49 0 0 0-.676 0z"
-                                                    fill-rule="evenodd"></path>
-                                            </svg>
-                                        </a>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown">
+                                              Action
+                                            </button>
+                                            <div class="dropdown-menu">
+                                              <a class="dropdown-item" href="myprofile.php?id=<?=$row['Id']?>">Delete Post</a>
+                                              <a class="dropdown-item" href="#">Edit Post</a>
+                                            </div>
+                                        </div>
+        
                                     </span>
                                 </div>
                             </div>
@@ -282,6 +288,7 @@ while ($row = mysqli_fetch_array($rest)) {
                     integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
                     crossorigin="anonymous"></script>
                 <script src="assets/js/bootstrap.min.js"></script>
+                <script src="assets/js/elements.js"></script>
                 <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
             </body>
 
